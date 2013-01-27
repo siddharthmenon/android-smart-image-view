@@ -5,3 +5,6 @@ build.num
 _includes
 _layouts
 gh-pages
+bin/
+gen/
+.project

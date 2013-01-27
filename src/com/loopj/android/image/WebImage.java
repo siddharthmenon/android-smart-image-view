@@ -7,9 +7,10 @@ import java.net.URLConnection;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 public class WebImage implements SmartImage {
-    private static final int CONNECT_TIMEOUT = 5000;
+    private static final int CONNECT_TIMEOUT = 7000;
     private static final int READ_TIMEOUT = 10000;
 
     private static WebImageCache webImageCache;
@@ -48,10 +49,17 @@ public class WebImage implements SmartImage {
             URLConnection conn = new URL(url).openConnection();
             conn.setConnectTimeout(CONNECT_TIMEOUT);
             conn.setReadTimeout(READ_TIMEOUT);
-            bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPurgeable = true;
+            Rect rect = new Rect(-1,-1,-1,-1);
+            bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent(), rect, options);
         } catch(Exception e) {
             e.printStackTrace();
-        }
+            bitmap = null;
+        } catch (OutOfMemoryError e) {
+        	e.printStackTrace();
+		}
+        
 
         return bitmap;
     }

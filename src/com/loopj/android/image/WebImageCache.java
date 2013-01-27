@@ -139,7 +139,9 @@ public class WebImageCache {
             String filePath = getFilePath(url);
             File file = new File(filePath);
             if(file.exists()) {
-                bitmap = BitmapFactory.decodeFile(filePath);
+            	BitmapFactory.Options options = new BitmapFactory.Options();
+            	options.inPurgeable = true;
+                bitmap = BitmapFactory.decodeFile(filePath, options);
             }
         }
         return bitmap;
