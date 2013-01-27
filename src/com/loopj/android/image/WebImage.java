@@ -53,12 +53,14 @@ public class WebImage implements SmartImage {
             options.inPurgeable = true;
             Rect rect = new Rect(-1,-1,-1,-1);
             bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent(), rect, options);
-        } catch(Exception e) {
+        }catch (OutOfMemoryError e) {
+        	e.printStackTrace();
+        	bitmap = null;
+		}
+        catch(Exception e) {
             e.printStackTrace();
             bitmap = null;
-        } catch (OutOfMemoryError e) {
-        	e.printStackTrace();
-		}
+        } 
         
 
         return bitmap;

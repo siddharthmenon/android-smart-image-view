@@ -141,7 +141,14 @@ public class WebImageCache {
             if(file.exists()) {
             	BitmapFactory.Options options = new BitmapFactory.Options();
             	options.inPurgeable = true;
-                bitmap = BitmapFactory.decodeFile(filePath, options);
+            	try{
+            		bitmap = BitmapFactory.decodeFile(filePath, options);
+            	} catch (OutOfMemoryError e){
+            		e.printStackTrace();
+            		options.inSampleSize = 2;
+            		bitmap = BitmapFactory.decodeFile(filePath, options);
+            	}
+                
             }
         }
         return bitmap;
